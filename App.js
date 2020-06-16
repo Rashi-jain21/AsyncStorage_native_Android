@@ -6,25 +6,22 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
-  View,
-  Text,
   StatusBar,
+  Text, NativeModules, TouchableOpacity
 } from 'react-native';
 
 import {
-  Header,
-  LearnMoreLinks,
   Colors,
-  DebugInstructions,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
+const App = () => {
+  const localStorage = NativeModules.LocalStorageModule;
+  const [userData,setUserData]= useState("");
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -32,40 +29,24 @@ const App: () => React$Node = () => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
+            <TouchableOpacity onPress={()=>{localStorage.setData("test",JSON.stringify({name:"rashi",age:25}))}}>
+            <Text>{"Set Data"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>{
+              let data = localStorage.getData("test");
+              console.log("the data we get is",data);
+              setUserData(data);
+              }}>
+            <Text>{"Get Data"}</Text>
+            </TouchableOpacity>
+            {!!userData && <View>
+              <Text>
+                {"The Data of the user from the local-storage"}
               </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
+              <Text>
+                {userData}
               </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
+            </View>}
         </ScrollView>
       </SafeAreaView>
     </>

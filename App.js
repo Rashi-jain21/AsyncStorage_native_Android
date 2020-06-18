@@ -12,7 +12,7 @@ import {
   StyleSheet,
   ScrollView,
   StatusBar,
-  Text, NativeModules, TouchableOpacity
+  Text, NativeModules, TouchableOpacity,View
 } from 'react-native';
 
 import {
@@ -32,8 +32,8 @@ const App = () => {
             <TouchableOpacity onPress={()=>{localStorage.setData("test",JSON.stringify({name:"rashi",age:25}))}}>
             <Text>{"Set Data"}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{
-              let data = localStorage.getData("test");
+            <TouchableOpacity onPress={async ()=>{
+              let data = await localStorage.getData("test");
               console.log("the data we get is",data);
               setUserData(data);
               }}>

@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.Context; 
 import android.widget.Toast;
 import android.util.Log;
+import com.facebook.react.bridge.Promise;
 
 public class LocalStorageModule extends ReactContextBaseJavaModule {
   private static ReactApplicationContext reactContext;
@@ -26,26 +27,21 @@ public class LocalStorageModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public String getData(String key){
+  public void getData(String key,final Promise promise){
     SharedPreferences localData = reactContext.getSharedPreferences("userInfo",Context.MODE_PRIVATE);
     Log.d("the value of the key  is",key);
-    String name = localData.getString(key,null);
-    Log.d("the value from the storage",name);
-    return name;
+    String data = localData.getString(key,null);
+    Log.d("the value from the storage",data); //to show how to use logs
+    promise.resolve(data.toString());
   };
 
   @ReactMethod
-  public String setData(String key, String value){
-    Log.d("the value and the key are",key);
-    Log.d("the value and the key are",value);
-
+  public void setData(String key, String value){
     SharedPreferences localData = reactContext.getSharedPreferences("userInfo",Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = localData.edit(); 
     editor.putString(key,value);
     editor.apply();
     Toast.makeText(getReactApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
-    return null;
-
   }
 }
 
